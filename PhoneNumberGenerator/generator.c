@@ -154,4 +154,6 @@ int main(int argc, char** argv) {
 	}
 	SetConsoleScreenBufferInfoEx(hConsole, &consoleInfo);
 	free(filter);
+
+	return EXIT_SUCCESS;
 }
