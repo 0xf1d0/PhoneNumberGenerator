@@ -10,4 +10,4 @@ ___Patterns___:
 
 
 ___Command___:
-`Generator.exe pattern.txt 06`
+`Generator.exe pattern.txt`
