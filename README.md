@@ -11,3 +11,4 @@ ___Patterns___:
 
 ___Command___:
 `Generator.exe pattern.txt`
+![image](https://user-images.githubusercontent.com/40890393/194785372-5d5e4d61-f32a-45f4-94e3-ae7761d69e69.png)
