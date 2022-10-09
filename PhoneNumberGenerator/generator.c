@@ -21,6 +21,8 @@
 
 /* MAX NL AUTHORIZED BY THE PROGRAM */
 static const unsigned long maxNL = 10000;
+
+/* Number of numlist files to generate */
 static unsigned long nl = 6;
 
 /* FR PREFIX (06 | 07) */
@@ -103,6 +105,7 @@ int main(int argc, char** argv) {
 	if (filter == NULL)
 		printError("Memory exceeded !");
 
+	/* Pointing back the starting of the file */
 	fseek(pStream, 0, SEEK_SET);
 	size_t blocks = fread(filter, sizeof(char), size, pStream);
 	if (blocks != size)
@@ -134,7 +137,7 @@ int main(int argc, char** argv) {
 			snprintf(buffer, sizeof(buffer), "%04d", i);
 			if (tre_regexec(&preg, buffer, 0, NULL, 0) == REG_OK) {
 				for (j = 0; j < 10000; ++j) {
-					fprintf(nlStream, "%s%s%04d", prefix, buffer, j);
+					fprintf(nlStream, "%s%s%04d\n", prefix, buffer, j);
 				}
 			}
 		}
