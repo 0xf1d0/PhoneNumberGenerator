@@ -9,11 +9,11 @@
 #include <windows.h>
 #include <tre/tre.h>
 
-/* FR Standard */
+/* FR STANDARD */
 #define PREFIX_SIZE 2
 #define NUM_SIZE 10
 
-/* Windows Colors */
+/* WINDOWS COLORS */
 #define RED 0x000CF
 #define GREEN 0x000AF
 #define BLUE 0x0009F
@@ -22,16 +22,16 @@
 /* MAX NL AUTHORIZED BY THE PROGRAM */
 static const unsigned long maxNL = 10000;
 
-/* Number of numlist files to generate */
+/* NUMBER OF NUMLIST FILES TO GENERATE */
 static unsigned long nl = 6;
 
 /* FR PREFIX (06 | 07) */
 static char* prefix = "06";
 
-/* Accessing pattern and numlist streams */
+/* ACCESSING PATTERN AND NUMLIST STREAMS */
 static FILE* pStream, * nlStream;
 
-/* Handle Windows Console */
+/* HANDLE WINDOWS CONSOLE */
 static HANDLE hConsole;
 static CONSOLE_SCREEN_BUFFER_INFOEX consoleInfo;
 
@@ -64,14 +64,18 @@ void printError(const char* format, ...) {
  * Usage: Generator.exe pattern.txt [prefix: 06] [nl: 6]
  */
 int main(int argc, char** argv) {
+	/* Handle the interrupt signal */
 	signal(SIGINT, sigHandler);
+
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
+	/* Set the Buffer Info size */
 	consoleInfo.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
 
 	/* Store the current console infos */
 	GetConsoleScreenBufferInfoEx(hConsole, &consoleInfo);
 
+	/* The user has to specify a regex pattern */
 	if (argc < 2)
 		printError("Usage: %s pattern.txt [06] [12]", argv[0]);
 
@@ -81,6 +85,7 @@ int main(int argc, char** argv) {
 	if (rcode != 0)
 		printError("Can't access file %s", argv[1]);
 
+	/* Check if the user entered a custom prefix */
 	if (argc > 2) {
 		if (strlen(argv[2]) != PREFIX_SIZE)
 			printError("Prefix has to be composed of %d digits", PREFIX_SIZE);
@@ -88,7 +93,7 @@ int main(int argc, char** argv) {
 			prefix = argv[2];
 	}
 
-
+	/* Check if the user entered a custom number of numlists */
 	if (argc > 3) {
 		unsigned long value = strtoul(argv[3], NULL, 10);
 		if (value > maxNL)
@@ -101,6 +106,7 @@ int main(int argc, char** argv) {
 	fseek(pStream, 0, SEEK_END);
 	long size = ftell(pStream);
 
+	/* Create a memory location to store the regex */
 	char* filter = malloc(sizeof(char) * (size_t)size + 1);
 	if (filter == NULL)
 		printError("Memory exceeded !");
@@ -111,7 +117,7 @@ int main(int argc, char** argv) {
 	if (blocks != size)
 		printError("Could not read all blocks from %s", argv[1]);
 
-
+	/* Store the compiled regex */
 	regex_t preg;
 	if (tre_regcomp(&preg, filter, REG_EXTENDED) != REG_OK)
 		printError("Could not compile regex \"%s\" from %s", filter, argv[1]);
@@ -119,6 +125,7 @@ int main(int argc, char** argv) {
 
 	int y, i, j;
 
+	/* Generate all the possible numbers following the regex pattern */
 	for (y = 0; y < nl; ++y) {
 		char numlist[16];
 		snprintf(numlist, sizeof(numlist), "numlist%d.txt", y + 1);
