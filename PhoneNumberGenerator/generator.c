@@ -16,6 +16,7 @@
 #define BLUE 0x009F
 #define PURPLE 0x00DF
 
+/* MAX NL AUTHORIZED BY THE PROGRAM */
 static const unsigned long maxNL = 10000;
 static unsigned long nl = 6;
 
