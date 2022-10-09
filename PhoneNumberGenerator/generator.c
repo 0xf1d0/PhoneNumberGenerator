@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
 
 
 	if (argc > 3) {
-		unsigned long value = strtoul(argv[3]);
+		unsigned long value = strtoul(argv[3], NULL, 10);
 		if (value > maxNL)
 			printError("Number of numlists is too large");
 		else
@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
 
 	int y, i, j;
 
-	for (y = 0; y < nl, ++y) {
+	for (y = 0; y < nl; ++y) {
 		char numlist[16];
 		snprintf(numlist, sizeof(numlist), "numlist%d.txt", y + 1);
 		SetConsoleTextAttribute(hConsole, GREEN);
